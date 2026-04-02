@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 APP_NAME = "[LaTaverneAI]"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.1.1"
 
 def _get_db_path() -> str:
     home = Path.home()
