@@ -3,7 +3,7 @@
 ; Configuration pour installation locale sans droits administrateur (User-mode)
 
 #define MyAppName "LaTaverneAI"
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.1.2"
 #define MyAppPublisher "Timéo (Veyler)"
 #define MyAppURL "https://github.com/Veyler/-LaTaverneAI-"
 #define MyAppExeName "[LaTaverneAI].exe"
