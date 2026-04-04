@@ -61,6 +61,7 @@ def init_db():
                 content         TEXT NOT NULL,
                 reasoning       TEXT,
                 model_id        TEXT,
+                image_data      TEXT,  -- Données base64 de l'image
                 created_at      TEXT NOT NULL,
                 FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
             );
@@ -177,12 +178,12 @@ def touch_conversation(conv_id: int):
 
 # ─── Messages ─────────────────────────────────────────────────────────────────
 
-def add_message(conv_id: int, role: str, content: str, reasoning: str = None, model_id: str = None) -> int:
+def add_message(conv_id: int, role: str, content: str, reasoning: str = None, model_id: str = None, image_data: str = None) -> int:
     now = datetime.now().isoformat()
     with _get_conn() as conn:
         cursor = conn.execute(
-            "INSERT INTO messages (conversation_id, role, content, reasoning, model_id, created_at) VALUES (?,?,?,?,?,?)",
-            (conv_id, role, content, reasoning, model_id, now)
+            "INSERT INTO messages (conversation_id, role, content, reasoning, model_id, image_data, created_at) VALUES (?,?,?,?,?,?,?)",
+            (conv_id, role, content, reasoning, model_id, image_data, now)
         )
     touch_conversation(conv_id)
     return cursor.lastrowid
@@ -191,7 +192,7 @@ def add_message(conv_id: int, role: str, content: str, reasoning: str = None, mo
 def get_messages(conv_id: int) -> list[dict]:
     with _get_conn() as conn:
         rows = conn.execute(
-            "SELECT id, role, content, reasoning, model_id, created_at "
+            "SELECT id, role, content, reasoning, model_id, image_data, created_at "
             "FROM messages WHERE conversation_id=? ORDER BY created_at ASC",
             (conv_id,)
         ).fetchall()
@@ -199,6 +200,16 @@ def get_messages(conv_id: int) -> list[dict]:
 
 
 def get_conversation_context(conv_id: int) -> list[dict]:
-    """Retourne l'historique formaté pour l'API OpenAI."""
+    """Retourne l'historique formaté pour l'API OpenAI (supporte la Vision)."""
     msgs = get_messages(conv_id)
-    return [{"role": m["role"], "content": m["content"]} for m in msgs]
+    context = []
+    for m in msgs:
+        if m["image_data"]:
+            content = [
+                {"type": "text", "text": m["content"]},
+                {"type": "image_url", "image_url": {"url": m["image_data"]}}
+            ]
+        else:
+            content = m["content"]
+        context.append({"role": m["role"], "content": content})
+    return context

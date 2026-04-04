@@ -57,12 +57,22 @@ PROVIDERS = [
 # ─── Modèles disponibles ─────────────────────────────────────────────────────
 AVAILABLE_MODELS = [
     {
-        "label":              "GPT-OSS 120B",
+        "label":              "ChatGPT",
         "id":                 "openai/gpt-oss-120b",
         "provider_id":        "nvidia",
-        "description":        "Modèle principal open-source 120B",
+        "description":        "Modèle principal (Standard)",
         "max_tokens":         4096,
         "supports_reasoning": True,
+        "supports_vision":     False,
+    },
+    {
+        "label":              "Llama 3.2 Vision 11B",
+        "id":                 "meta/llama-3.2-11b-vision-instruct",
+        "provider_id":        "nvidia",
+        "description":        "Modèle Vision performant 11B",
+        "max_tokens":         4096,
+        "supports_reasoning": False,
+        "supports_vision":     True,
     }
 ]
 

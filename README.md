@@ -46,19 +46,10 @@ Pour créer l'installeur, utilisez Inno Setup avec le fichier `setup.iss`.
 - ✅ Création de compte / connexion (hashage SHA-256 + salt)
 - ✅ Mode invité (sans compte)
 - ✅ Historique des conversations par utilisateur (SQLite)
-- ✅ Sélecteur de modèle en temps réel
-- ✅ Affichage du raisonnement cognitif (reasoning_content) collapsible
+- ✅ Sélecteur de modèle en temps réel (gpt-oss-120b - texte, Llama 3.2 Vision 11B - texte et image)
 - ✅ Titre auto-généré pour chaque conversation
 - ✅ Suppression de conversations
 - ✅ Panneau de paramètres (personnalisation de la couleur d'accentuation et du System Prompt)
-- ✅ UI sombre cyberpunk moderne
+- ✅ UI sombre moderne
 - ✅ Multi-utilisateurs
 
-## Évolutions suggérées
-
-- Streaming de la réponse token par token
-- Export des conversations en Markdown/PDF
-- Paramètres avancés par conversation (température, top_p...)
-- Thèmes clairs/sombres switchables
-- Raccourcis clavier
-- Recherche précise dans l'historique
