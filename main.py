@@ -1,5 +1,6 @@
 """
 LaTaverneIA — Point d'entrée principal.
+
 """
 
 import os
@@ -17,6 +18,9 @@ from core import config as cfg
 from ui.auth_screen import AuthScreen
 from ui.sidebar import Sidebar
 from ui.chat_view import ChatView
+import threading
+from ui.splash_screen import SplashScreen
+from core.updater import check_for_updates, download_and_install_update
 
 
 class App(ctk.CTk):
@@ -55,7 +59,34 @@ class App(ctk.CTk):
         except Exception:
             pass
 
+        # Hide main window initially
+        self.withdraw()
+        
+        # Show splash screen
+        self._splash = SplashScreen(self)
+        self._splash.update()
+        
+        # Check updates in the background
+        threading.Thread(target=self._check_updates, daemon=True).start()
+
+    def _check_updates(self):
+        self._splash.update_status("Recherche de mises à jour...")
+        update_info = check_for_updates()
+        if update_info:
+            self._splash.update_status(f"Mise à jour {update_info['version']} trouvée...")
+            download_and_install_update(update_info["url"], self._update_splash_callback)
+        else:
+            self._splash.update_status("Chargement de l'application...")
+            self.after(500, self._finish_startup)
+            
+    def _update_splash_callback(self, text: str):
+        # Utiliser after pour être thread-safe avec Tkinter
+        self.after(0, lambda: self._splash.update_status(text))
+        
+    def _finish_startup(self):
+        self._splash.destroy()
         self._show_auth()
+        self.deiconify()
 
     # ─── Navigation ──────────────────────────────────────────────────────────
 

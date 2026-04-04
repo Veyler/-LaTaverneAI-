@@ -1,6 +1,7 @@
 """
 Couche API — abstraction autour du client OpenAI.
 Supporte plusieurs providers (base_url + api_key indépendants par modèle).
+
 """
 
 from openai import OpenAI
