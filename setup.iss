@@ -3,7 +3,7 @@
 ; Configuration pour installation locale sans droits administrateur (User-mode)
 
 #define MyAppName "LaTaverneAI"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "Timéo (Veyler)"
 #define MyAppURL "https://github.com/Veyler/-LaTaverneAI-"
 #define MyAppExeName "[LaTaverneAI].exe"
@@ -40,10 +40,9 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; L'exécutable PyInstaller généré (doit être compilé AVANT de lancer InnoSetup)
-Source: "dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-; Si besoin d'autres fichiers, les rajouter ici. (Icones incluses dans l'exe standalone pyinstaller logiquement)
-Source: "icons\*"; DestDir: "{app}\icons"; Flags: ignoreversion recursesubdirs createallsubdirs
+; L'application compilée en dossier (--onedir) produit le dossier dist\[LaTaverneAI]
+Source: "dist\[LaTaverneAI]\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\[LaTaverneAI]\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
